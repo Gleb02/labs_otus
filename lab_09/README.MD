@@ -1,7 +1,5 @@
 # Настройка протокола OSPFv2 для одной области
 
-Работа выполнена на ПК с установленным Cisco Packet Tracer.
-
 #### Топология
 
 ![alt text](https://github.com/Gleb02/labs_otus/blob/main/lab_09/Топология%20(2).png)
