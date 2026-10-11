@@ -1,7 +1,5 @@
 # LR10_Настройка протокола OSPFv2 для одной области
 
-Работа выполнена на ПК с установленным Cisco Packet Tracer.
-
 #### Топология
 
 ![alt text](https://github.com/Gleb02/labs_otus/blob/main/lab_10/image.png)
