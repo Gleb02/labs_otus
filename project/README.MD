@@ -346,55 +346,54 @@
     Gig0/1    UNUSED             disabled 999        auto    auto  10/100BaseTX
     Gig0/2    UNUSED             disabled 999        auto    auto  10/100BaseTX
 
-S2#show vlan brief 
-
-VLAN Name                             Status    Ports
----- -------------------------------- --------- -------------------------------
-1    default                          active    Fa0/1, Fa0/2
-10   Managment                        active    
-20   Administration                   active    Fa0/6
-30   Users                            active    
-40   Guest                            active    Fa0/7
-50   OSPF_TRANSIT                     active    Fa0/5
-999  ParkingLot                       active    Fa0/3, Fa0/4, Fa0/8, Fa0/9
+    S2#show vlan brief 
+    VLAN Name                             Status    Ports
+    ---- -------------------------------- --------- -------------------------------
+    1    default                          active    Fa0/1, Fa0/2
+    10   Managment                        active    
+    20   Administration                   active    Fa0/6
+    30   Users                            active    
+    40   Guest                            active    Fa0/7
+    50   OSPF_TRANSIT                     active    Fa0/5
+    999  ParkingLot                       active    Fa0/3, Fa0/4, Fa0/8, Fa0/9
                                                 Fa0/10, Fa0/11, Fa0/12, Fa0/13
                                                 Fa0/14, Fa0/15, Fa0/16, Fa0/17
                                                 Fa0/18, Fa0/19, Fa0/20, Fa0/21
                                                 Fa0/22, Fa0/23, Fa0/24, Gig0/1
                                                 Gig0/2
-1000 Native                           active    
-1002 fddi-default                     active    
-1003 token-ring-default               active    
-1004 fddinet-default                  active    
-1005 trnet-default                    active 
-S2# show interfaces status 
-Port      Name               Status       Vlan       Duplex  Speed Type
-Fa0/1                        connected    1          auto    auto  10/100BaseTX
-Fa0/2                        connected    1          auto    auto  10/100BaseTX
-Fa0/3     UNUSED             disabled 999        auto    auto  10/100BaseTX
-Fa0/4     UNUSED             disabled 999        auto    auto  10/100BaseTX
-Fa0/5     OSPF Transit to R2 notconnect   50         auto    auto  10/100BaseTX
-Fa0/6     PC-D Administratio connected    20         auto    auto  10/100BaseTX
-Fa0/7     PC-E Guest         connected    40         auto    auto  10/100BaseTX
-Fa0/8     UNUSED             disabled 999        auto    auto  10/100BaseTX
-Fa0/9     UNUSED             disabled 999        auto    auto  10/100BaseTX
-Fa0/10    UNUSED             disabled 999        auto    auto  10/100BaseTX
-Fa0/11    UNUSED             disabled 999        auto    auto  10/100BaseTX
-Fa0/12    UNUSED             disabled 999        auto    auto  10/100BaseTX
-Fa0/13    UNUSED             disabled 999        auto    auto  10/100BaseTX
-Fa0/14    UNUSED             disabled 999        auto    auto  10/100BaseTX
-Fa0/15    UNUSED             disabled 999        auto    auto  10/100BaseTX
-Fa0/16    UNUSED             disabled 999        auto    auto  10/100BaseTX
-Fa0/17    UNUSED             disabled 999        auto    auto  10/100BaseTX
-Fa0/18    UNUSED             disabled 999        auto    auto  10/100BaseTX
-Fa0/19    UNUSED             disabled 999        auto    auto  10/100BaseTX
-Fa0/20    UNUSED             disabled 999        auto    auto  10/100BaseTX
-Fa0/21    UNUSED             disabled 999        auto    auto  10/100BaseTX
-Fa0/22    UNUSED             disabled 999        auto    auto  10/100BaseTX
-Fa0/23    UNUSED             disabled 999        auto    auto  10/100BaseTX
-Fa0/24    UNUSED             disabled 999        auto    auto  10/100BaseTX
-Gig0/1    UNUSED             disabled 999        auto    auto  10/100BaseTX
-Gig0/2    UNUSED             disabled 999        auto    auto  10/100BaseTX
+    1000 Native                           active    
+    1002 fddi-default                     active    
+    1003 token-ring-default               active    
+    1004 fddinet-default                  active    
+    1005 trnet-default                    active 
+    S2# show interfaces status 
+    Port      Name               Status       Vlan       Duplex  Speed Type
+    Fa0/1                        connected    1          auto    auto  10/100BaseTX
+    Fa0/2                        connected    1          auto    auto  10/100BaseTX
+    Fa0/3     UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Fa0/4     UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Fa0/5     OSPF Transit to R2 notconnect   50         auto    auto  10/100BaseTX
+    Fa0/6     PC-D Administratio connected    20         auto    auto  10/100BaseTX
+    Fa0/7     PC-E Guest         connected    40         auto    auto  10/100BaseTX
+    Fa0/8     UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Fa0/9     UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Fa0/10    UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Fa0/11    UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Fa0/12    UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Fa0/13    UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Fa0/14    UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Fa0/15    UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Fa0/16    UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Fa0/17    UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Fa0/18    UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Fa0/19    UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Fa0/20    UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Fa0/21    UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Fa0/22    UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Fa0/23    UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Fa0/24    UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Gig0/1    UNUSED             disabled 999        auto    auto  10/100BaseTX
+    Gig0/2    UNUSED             disabled 999        auto    auto  10/100BaseTX
 
     S3#show vlan brief 
     VLAN Name                             Status    Ports
