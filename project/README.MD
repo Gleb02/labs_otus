@@ -857,6 +857,14 @@
     R2(config-if)#ip address 10.255.0.2 255.255.255.252
     R2(config-if)#no sh
     R2(config-if)#ex
+    R2(config)#interface g0/0/1
+    R2(config-if)#des
+    R2(config-if)#description  TRUNK_TO_R3
+    R2(config-if)#no ip ad
+    R2(config-if)#no ip address 
+    R2(config-if)#no shu
+    R2(config-if)#no shutdown 
+    R2(config-if)#ex
     R2(config)#interface g0/0/1.110
     R2(config-subif)#des
     R2(config-subif)#description  VLAN_110_MANAGEMENT
@@ -1023,8 +1031,7 @@
 
 ## Часть 4. Настройка DHCPv4
 
-###R1 — головной офис
-
+R1 — головной офис
 | VLAN	| Назначение |	Сеть            | DHCP |
 --------|------------|------------------|------|
 | 110   |	Management |192.168.110.0/24  |	Нет  |
@@ -1033,14 +1040,94 @@
 ------------------------------------------------
 *Management VLAN не обслуживаем DHCP, потому что IP‑адреса сетевого оборудования должны быть постоянными.
 
+R2 — филиал
+|VLAN|Назначение      |	Сеть	         |DHCP |
+|----|----------------|----------------|-----|
+|10	 |Management	    |192.168.10.0/24 |	Нет|
+|20	 |Administration	|192.168.20.0/24 |Да   |
+|30  |Users	          |192.168.30.0/24 |Да   |
+|40	 |Guest	          |192.168.40.0/24 |Да   |
+|50	 |OSPF_TRANSIT    |	10.255.0.0/30	 |Нет  |
+----------------------------------------------
+*Примечание: PC‑A будет иметь статический IP, для будущей настройки static NAT.
+
 ### Шаг 1. Исключение служебных адресов и создание пулов на R1
+
+    R1>en
+    R1#conf t
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    R1(config)#ip dhcp
+    R1(config)#ip dhcp ex
+    R1(config)#ip dhcp excluded-address 192.168.20.1 192.168.20.10
+    R1(config)#ip dhcp excluded-address 192.168.30.1 192.168.30.9
+    R1(config)#ip dhcp excluded-address 192.168.40.1 192.168.40.9
+    R1(config)#ip dh
+    R1(config)#ip dhcp po
+    R1(config)#ip dhcp pool HQ_ADMINISTRATION
+    R1(dhcp-config)#netw
+    R1(dhcp-config)#network 192.168.20.0 255.255.255.0
+    R1(dhcp-config)#def
+    R1(dhcp-config)#default-router 192.168.20.1
+    R1(dhcp-config)#ex
+    R1(config)#ip dh
+    R1(config)#ip dhcp po
+    R1(config)#ip dhcp pool HQ_USERS
+    R1(dhcp-config)#netw
+    R1(dhcp-config)#network 192.168.30.0 255.255.255.0
+    R1(dhcp-config)#de
+    R1(dhcp-config)#default-router 192.168.30.1
+    R1(dhcp-config)#ex
+    R1(config)#ip dhc
+    R1(config)#ip dhcp po
+    R1(config)#ip dhcp pool HQ_GUEST
+    R1(dhcp-config)#net
+    R1(dhcp-config)#network 192.168.40.0 255.255.255.0
+    R1(dhcp-config)#de
+    R1(dhcp-config)#default-router 192.168.40.1
+    R1(dhcp-config)#ex
+
+
 ### Шаг 2. Исключение служебных адресов и создание пулов на R2
-### Шаг 3. Настройка ПК
-DHCP включен на PC-B — PC-G
-### Шаг 4. Проверка адресов ПК
-### Шаг 5. Проверка DHCP на R1 и R2
-### Шаг 6. Ping шлюзов с ПК
-### Шаг 7. Ping между ПК
+
+    R2#
+    R2#conf t
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    R2(config)#ip dh
+    R2(config)#ip dhcp ex
+    R2(config)#ip dhcp excluded-address 192.168.120.1 192.168.120.9
+    R2(config)#ip dhc
+    R2(config)#ip dhcp ex
+    R2(config)#ip dhcp po
+    R2(config)#ip dhcp pool BRANCH_USERS
+    R2(dhcp-config)#network 192.168.120.0 255.255.255.0
+    R2(dhcp-config)#def
+    R2(dhcp-config)#default-router 192.168.120.1
+    R2(dhcp-config)#ex
+    R2(config)#ip dhcp pool BRANCH_GUEST
+    R2(dhcp-config)#network 192.168.140.0 255.255.255.0
+    R2(dhcp-config)#default-router 192.168.140.1
+    R2(dhcp-config)#ex
+    R2(config)#
+
+### Шаг 3. Проверка адресов ПК
+
+![alt text](https://github.com/Gleb02/labs_otus/blob/main/project/image/Ping%20PC-A%20getway.png)
+
+![alt text](https://github.com/Gleb02/labs_otus/blob/main/project/image/Ping%20PC-B%20getway.png)
+
+![alt text](https://github.com/Gleb02/labs_otus/blob/main/project/image/Ping%20PC-C%20getway.png)
+
+![alt text](https://github.com/Gleb02/labs_otus/blob/main/project/image/Ping%20PC-D%20getway.png)
+
+![alt text](https://github.com/Gleb02/labs_otus/blob/main/project/image/Ping%20PC-E%20getway.png)
+
+![alt text](https://github.com/Gleb02/labs_otus/blob/main/project/image/Ping%20PC-F%20getway.png)
+
+![alt text](https://github.com/Gleb02/labs_otus/blob/main/project/image/Ping%20PC-G%20getway.png)
+
+### Шаг 4. Проверка DHCP на R1 и R2
+### Шаг 5. Ping шлюзов с ПК
+### Шаг 6. Ping между ПК
 ## Часть 5. Настройка IPv6, SLAAC и DHCPv6
 ### Шаг 1. IPv6-маршрутизация на R1 и R2
 ### Шаг 2. Настройка адресов IPv6, VLAN и DHCPv6 на R1
