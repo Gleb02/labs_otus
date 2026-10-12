@@ -1109,7 +1109,8 @@ R2 — филиал
     R2(dhcp-config)#ex
     R2(config)#
 
-### Шаг 3. Проверка адресов ПК
+
+### Шаг 3. Ping шлюзов с ПК
 
 ![alt text](https://github.com/Gleb02/labs_otus/blob/main/project/image/Ping%20PC-A%20getway.png)
 
@@ -1125,9 +1126,6 @@ R2 — филиал
 
 ![alt text](https://github.com/Gleb02/labs_otus/blob/main/project/image/Ping%20PC-G%20getway.png)
 
-### Шаг 4. Проверка DHCP на R1 и R2
-### Шаг 5. Ping шлюзов с ПК
-### Шаг 6. Ping между ПК
 ## Часть 5. Настройка IPv6, SLAAC и DHCPv6
 ### Шаг 1. IPv6-маршрутизация на R1 и R2
 ### Шаг 2. Настройка адресов IPv6, VLAN и DHCPv6 на R1
