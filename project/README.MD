@@ -29,13 +29,8 @@
     - [Шаг 1. IPv6-маршрутизация на R1 и R2](#шаг-1-ipv6-маршрутизация-на-r1-и-r2)
     - [Шаг 2. Настройка адресов IPv6, VLAN и DHCPv6 на R1](#шаг-2-настройка-адресов-ipv6-vlan-и-dhcpv6-на-r1)
     - [Шаг 3. Настройка адресов IPv6, VLAN и DHCPv6 на R2](#шаг-3-настройка-адресов-ipv6-vlan-и-dhcpv6-на-r2)
-    - [Шаг 4. Ping R1 \<-\> R2 по IPv6](#шаг-4-ping-r1---r2-по-ipv6)
-    - [Шаг 5. Настройка SLAAC на ПК](#шаг-5-настройка-slaac-на-пк)
-    - [Шаг 6. Настройка DHCPv6 на ПК](#шаг-6-настройка-dhcpv6-на-пк)
-    - [Шаг 7. Проверка DHCPv6 на маршрутизаторах](#шаг-7-проверка-dhcpv6-на-маршрутизаторах)
-    - [Шаг 8. Проверка связи ПК со шлюзом](#шаг-8-проверка-связи-пк-со-шлюзом)
-    - [Шаг 9. Проверка связи между ПК из разных VLAN](#шаг-9-проверка-связи-между-пк-из-разных-vlan)
-    - [Шаг 10.  Проверка таблиц IPv6-маршрутизации](#шаг-10--проверка-таблиц-ipv6-маршрутизации)
+    - [Шаг 4. Проверка DHCPv6 на маршрутизаторах](#шаг-4-проверка-dhcpv6-на-маршрутизаторах)
+    - [Шаг 5.  Проверка таблиц IPv6-маршрутизации](#шаг-5--проверка-таблиц-ipv6-маршрутизации)
   - [Часть 6. Статическая и динамическая маршрутизация](#часть-6-статическая-и-динамическая-маршрутизация)
     - [Шаг 1. Статический маршрут по умолчанию на R1](#шаг-1-статический-маршрут-по-умолчанию-на-r1)
     - [Шаг 2. Настройка OSPF на R1](#шаг-2-настройка-ospf-на-r1)
@@ -1123,16 +1118,133 @@ R2 — филиал
 ![alt text](https://github.com/Gleb02/labs_otus/blob/main/project/image/Ping%20PC-G%20getway.png)
 
 ## Часть 5. Настройка IPv6, SLAAC и DHCPv6
+Головной офис 
+VLAN | Назначение	     | IPv6‑сеть            |	Шлюз              |  Метод клиента      | 
+-----|-----------------|----------------------|-------------------|---------------------|
+10   | Management	     | 2001:DB8:10:10::/64	| 2001:DB8:10:10::1 | Static              |
+20   | Administration  | 2001:DB8:10:20::/64	| 2001:DB8:10:20::1 |	DHCPv6
+30   | Users	         | 2001:DB8:10:30::/64	| 2001:DB8:10:30::1	| SLAAC
+40   | Guest           | 2001:DB8:10:40::/64	|2001:DB8:10:40::1	| SLAAC
+50 	 | OSPF Transit	   | 2001:DB8:FFFF:12::/64|	-                 |	Static
+
+Филиал
+VLAN |	Назначение	| IPv6‑сеть            |	Шлюз	             | Метод клиента    |
+-----|--------------|----------------------|---------------------|------------------|
+110	 | Management	  | 2001:DB8:20:110::/64 |	2001:DB8:20:110::1 | Static           |
+120  | Users        |	2001:DB8:20:120::/64 |	2001:DB8:20:120::1 | DHCPv6           |
+140	 | Guest	      | 2001:DB8:20:140::/64 | 2001:DB8:20:140::1  |	SLAAC           |
+-------------------------------------------------------------------------------------
 ### Шаг 1. IPv6-маршрутизация на R1 и R2
+
+    R1>en
+    R1#conf t
+    Enter configuration commands, one per line. End with CNTL/Z.
+    R1(config)#ipv6 unicast-routing
+    R1(config)#
+
+    R2>en
+    R2#conf t
+    Enter configuration commands, one per line. End with CNTL/Z.
+    R2(config)#ipv6 unicast-routing
+    R2(config)#
+
 ### Шаг 2. Настройка адресов IPv6, VLAN и DHCPv6 на R1
+
+    R1#conf t
+    Enter configuration commands, one per line. End with CNTL/Z.
+    R1(config)#interface g0/0/1.10
+    R1(config-subif)#ipv6 address 2001:DB8:10:10::1/64
+    R1(config-subif)#ipv6 address FE80::1 link-local
+    R1(config-subif)#exit
+    R1(config)#interface g0/0/1.20
+    R1(config-subif)#ipv6 address 2001:DB8:10:20::1/64
+    R1(config-subif)#ipv6 address FE80::1 link-local
+    R1(config-subif)#exit
+    R1(config)#ipv6 dhcp pool HQ_ADMIN_V6
+    R1(config-dhcpv6)#address prefix 2001:DB8:10:20::/64
+    R1(config-dhcpv6)#exit
+    R1(config)#interface g0/0/1.20
+    R1(config-subif)#ipv6 nd managed-config-flag
+    R1(config-subif)#ipv6 dhcp server HQ_ADMIN_V6
+    R1(config-subif)#exit
+    R1(config)#interface g0/0/1.30
+    R1(config-subif)#ipv6 address 2001:DB8:10:30::1/64
+    R1(config-subif)#ipv6 address FE80::1 link-local
+    R1(config-subif)#exit
+    R1(config)#interface g0/0/1.40
+    R1(config-subif)#ipv6 address 2001:DB8:10:40::1/64
+    R1(config-subif)#ipv6 address FE80::1 link-local
+    R1(config-subif)#exit
+    R1(config)#interface g0/0/1.50
+    R1(config-subif)#ipv6 address 2001:DB8:FFFF:12::1/64
+    R1(config-subif)#ipv6 address FE80::1 link-local
+    R1(config-subif)#exit
+    R1(config)#
+
 ### Шаг 3. Настройка адресов IPv6, VLAN и DHCPv6 на R2
-### Шаг 4. Ping R1 <-> R2 по IPv6
-### Шаг 5. Настройка SLAAC на ПК
-### Шаг 6. Настройка DHCPv6 на ПК
-### Шаг 7. Проверка DHCPv6 на маршрутизаторах
-### Шаг 8. Проверка связи ПК со шлюзом
-### Шаг 9. Проверка связи между ПК из разных VLAN
-### Шаг 10.  Проверка таблиц IPv6-маршрутизации
+
+    R2(config)#interface g0/0/0
+    R2(config-if)#ipv6 address 2001:DB8:FFFF:12::2/64
+    R2(config-if)#ipv6 address FE80::2 link-local
+    R2(config-if)#exit
+    R2(config)#interface g0/0/1.110
+    R2(config-subif)#ipv6 address 2001:DB8:20:110::1/64
+    R2(config-subif)#ipv6 address FE80::1 link-local
+    R2(config-subif)#exit
+    R2(config)#interface g0/0/1.120
+    R2(config-subif)#ipv6 address 2001:DB8:20:120::1/64
+    R2(config-subif)#ipv6 address FE80::1 link-local
+    R2(config-subif)#exit
+    R2(config)#ipv6 dhcp pool BRANCH_USERS_V6
+    R2(config-dhcpv6)#address prefix 2001:DB8:20:120::/64
+    R2(config-dhcpv6)#exit
+    R2(config)#interface g0/0/1.120
+    R2(config-subif)#ipv6 nd managed-config-flag
+    R2(config-subif)#ipv6 dhcp server BRANCH_USERS_V6
+    R2(config-subif)#exit
+    R2(config)#interface g0/0/1.140
+    R2(config-subif)#ipv6 address 2001:DB8:20:140::1/64
+    R2(config-subif)#ipv6 address FE80::1 link-local
+    R2(config-subif)#exit
+    R2(config)#
+
+### Шаг 4. Проверка DHCPv6 на маршрутизаторах
+   
+    R1>en
+    R1#
+    R1#show ipv6 dhcp pool
+    DHCPv6 pool: HQ_ADMIN_V6
+    Address allocation prefix: 2001:DB8:10:20::/64 valid 172800 preferred 86400 (4 in use, 0 conflicts)
+    Active clients: 2
+    R1#show ipv6 dhcp binding
+    Client: FE80::20A:41FF:FEC3:C67C
+    DUID: 00010001448EC2DE000A41C3C67C
+    IA NA: IA ID 1916299600, T1 0, T2 0
+    Address: 2001:DB8:10:20:DEA0:9658:7A24:6C92
+             preferred lifetime 86400, valid lifetime 172800
+             expires at September 10 2026 11:11:24 pm (172800 seconds)
+    Client: FE80::201:64FF:FE60:A835
+    DUID: 000100014C9BC53400016460A835
+    IA NA: IA ID 1729085688, T1 0, T2 0
+    Address: 2001:DB8:10:20:F751:DB2D:CD8A:CD8A
+             preferred lifetime 86400, valid lifetime 172800
+             expires at September 10 2026 11:11:24 pm (172800 seconds)
+
+    R2>en
+    R2#
+    R2# show ipv6 dhcp pool
+    DHCPv6 pool: BRANCH_USERS_V6
+    Address allocation prefix: 2001:DB8:20:120::/64 valid 172800 preferred 86400 (2 in use, 0 conflicts)
+    Active clients: 1
+    R2#show ipv6 dhcp binding
+    Client: FE80::2E0:B0FF:FED4:DB0
+    DUID: 00010001B252116E00E0B0D40DB0
+    IA NA: IA ID 34992690, T1 0, T2 0
+    Address: 2001:DB8:20:120:9877:7C43:6EB1:501F
+             preferred lifetime 86400, valid lifetime 172800
+             expires at September 10 2026 11:12:11 pm (172800 seconds)
+### Шаг 5. Проверка таблиц маршрутизации IPv6
+
 ## Часть 6. Статическая и динамическая маршрутизация
 ### Шаг 1. Статический маршрут по умолчанию на R1
 ### Шаг 2. Настройка OSPF на R1
