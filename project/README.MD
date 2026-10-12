@@ -1,4 +1,4 @@
-# Проектная работа - Построение сети с нуля
+  # Проектная работа - Построение сети с нуля
 
 - [Проектная работа - Построение сети с нуля](#проектная-работа---построение-сети-с-нуля)
   - [Топология](#топология)
@@ -12,10 +12,9 @@
     - [Шаг 1. Настройка Trunk соединений.](#шаг-1-настройка-trunk-соединений)
     - [Шаг 2. Настройка режима STP.](#шаг-2-настройка-режима-stp)
     - [Шаг 3. Проверка Root Bridge и резервирования](#шаг-3-проверка-root-bridge-и-резервирования)
-    - [Шаг 4. Проверка переключения на резервный канал](#шаг-4-проверка-переключения-на-резервный-канал)
-    - [Шаг 5. Настройка PortFast на портах ПК](#шаг-5-настройка-portfast-на-портах-пк)
-    - [Шаг 6. Включение BPDU Guard на портах ПК](#шаг-6-включение-bpdu-guard-на-портах-пк)
-    - [Шаг 7. Проверка итоговых конфигураций](#шаг-7-проверка-итоговых-конфигураций)
+    - [Шаг 4. Настройка PortFast на портах ПК](#шаг-4-настройка-portfast-на-портах-пк)
+    - [Шаг 5. Включение BPDU Guard на портах ПК](#шаг-5-включение-bpdu-guard-на-портах-пк)
+    - [Шаг 6. Проверка итоговых конфигураций](#шаг-6-проверка-итоговых-конфигураций)
   - [Часть 3. Настройка IPv4 и Router-on-a-Stick](#часть-3-настройка-ipv4-и-router-on-a-stick)
     - [Шаг 1. Настройка интерфейсов на R1](#шаг-1-настройка-интерфейсов-на-r1)
     - [Шаг 2. Настройка интерфейсов на R2](#шаг-2-настройка-интерфейсов-на-r2)
@@ -445,18 +444,584 @@
 
 ## Часть 2. Настройка Trunk и резервирования
 ### Шаг 1. Настройка Trunk соединений.
+
+    S1(config)#interface fa0/5
+    S1(config-if)#description  TRUNK_TO_R1
+    S1(config-if)#sw
+    S1(config-if)#switchport mode trunk
+    S1(config-if)#switchport trunk native vlan 1000
+    S1(config-if)#switchport trunk allowed vlan 10,20,30,40,50,1000
+    S1(config-if)#switchport nonegotiate 
+    S1(config-if)#no shutdown 
+    S1(config-if)#ex
+    S1(config)#interface range fa0/1-2
+    S1(config-if-range)#description TRUNK_TO_S2
+    S1(config-if-range)#switchport mode trunk
+    S1(config-if-range)#switchport trunk allowed vlan 10,20,30,40,50,1000
+    S1(config-if-range)#switchport nonegotiate 
+    S1(config-if-range)#no shu
+    S1(config-if-range)#no shutdown 
+    S1(config-if-range)#ex
+
+    S2(config)#interface range fa0/1-2
+    S2(config-if-range)#description TRUNK_TO_S1
+    S2(config-if-range)#switchport mode trunk
+    S2(config-if-range)#sw
+    S2(config-if-range)#switchport trunk native vlan 1000
+    S2(config-if-range)#switchport trunk allowed vlan 10,20,30,40,50,1000
+    S2(config-if-range)#switchport none
+    S2(config-if-range)#switchport nonegotiate 
+    S2(config-if-range)#no shutdown 
+
+    S3>en
+    S3#conf t
+    S3(config)#interface fa0/5
+    S3(config-if)#description TRUNK_TO_R2
+    S3(config-if)#switchport mode trunk 
+    S3(config-if)#switchport trunk native vlan 1000
+    S3(config-if)#switchport trunk allowed vlan 110,120,140,1000
+    S3(config-if)#switchport nonegotiate 
+    S3(config-if)#no shutdown 
+    S3(config-if)#ex
+
 ### Шаг 2. Настройка режима STP.
+
+    S1#conf t
+    S1(config)#spanning-tree mode pvst
+    S1(config)#spanning-tree vlan 10,20,30,40,50,1000 root primary 
+
+    S2(config)#spanning-tree mode pvst
+    S2(config)#spanning-tree vlan 10,20,30,40,50,1000 root secondary 
+
+    S3(config)#spanning-tree mode pvst
+    S3(config)#
+
 ### Шаг 3. Проверка Root Bridge и резервирования
-### Шаг 4. Проверка переключения на резервный канал
-### Шаг 5. Настройка PortFast на портах ПК
-### Шаг 6. Включение BPDU Guard на портах ПК
-### Шаг 7. Проверка итоговых конфигураций
+
+    S1#show spanning-tree vlan 20
+    VLAN0020
+      Spanning tree enabled protocol ieee
+      Root ID    Priority    24596
+             Address     00D0.BC50.9A25
+             This bridge is the root
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+      Bridge ID  Priority    24596  (priority 24576 sys-id-ext 20)
+             Address     00D0.BC50.9A25
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+    Interface        Role Sts Cost      Prio.Nbr Type
+    ---------------- ---- --- --------- -------- --------------------------------
+    Fa0/6            Desg FWD 19        128.6    P2p
+    Fa0/1            Desg FWD 19        128.1    P2p
+    Fa0/2            Desg FWD 19        128.2    P2p
+
+    S2#show spanning-tree vlan 20
+    VLAN0020
+    Spanning tree enabled protocol ieee
+    Root ID    Priority    24596
+             Address     00D0.BC50.9A25
+             Cost        19
+             Port        1(FastEthernet0/1)
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+    Bridge ID  Priority    28692  (priority 28672 sys-id-ext 20)
+             Address     00E0.8FBD.0AA1
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+    Interface        Role Sts Cost      Prio.Nbr Type
+    ---------------- ---- --- --------- -------- --------------------------------
+    Fa0/6            Desg FWD 19        128.6    P2p
+    Fa0/1            Root FWD 19        128.1    P2p
+
+### Шаг 4. Настройка PortFast на портах ПК
+
+    S1#conf t
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    S1(config)#interface range fa0/6-8
+    S1(config-if-range)#spa
+    S1(config-if-range)#spanning-tree po
+    S1(config-if-range)#spanning-tree portfast 
+    %Warning: portfast should only be enabled on ports connected to a single
+    host. Connecting hubs, concentrators, switches, bridges, etc... to this
+    interface  when portfast is enabled, can cause temporary bridging loops.
+    Use with CAUTION
+
+    %Portfast has been configured on FastEthernet0/6 but will only
+    have effect when the interface is in a non-trunking mode.
+    %Warning: portfast should only be enabled on ports connected to a single
+    host. Connecting hubs, concentrators, switches, bridges, etc... to this
+    interface  when portfast is enabled, can cause temporary bridging loops.
+    Use with CAUTION
+
+    %Portfast has been configured on FastEthernet0/7 but will only
+    have effect when the interface is in a non-trunking mode.
+    %Warning: portfast should only be enabled on ports connected to a single
+    host. Connecting hubs, concentrators, switches, bridges, etc... to this
+    interface  when portfast is enabled, can cause temporary bridging loops.
+    Use with CAUTION
+
+    %Portfast has been configured on FastEthernet0/8 but will only
+    have effect when the interface is in a non-trunking mode.
+    S1(config-if-range)#ex
+    S1(config)#
+
+    S2#conf t
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    S2(config)#int
+    S2(config)#interface rang
+    S2(config)#interface range fa0/6-7
+    S2(config-if-range)#spa
+    S2(config-if-range)#spanning-tree po
+    S2(config-if-range)#spanning-tree portfast 
+    %Warning: portfast should only be enabled on ports connected to a single
+    host. Connecting hubs, concentrators, switches, bridges, etc... to this
+    interface  when portfast is enabled, can cause temporary bridging loops.
+    Use with CAUTION
+
+    %Portfast has been configured on FastEthernet0/6 but will only
+    have effect when the interface is in a non-trunking mode.
+    %Warning: portfast should only be enabled on ports connected to a single
+    host. Connecting hubs, concentrators, switches, bridges, etc... to this
+    interface  when portfast is enabled, can cause temporary bridging loops.
+    Use with CAUTION
+
+    %Portfast has been configured on FastEthernet0/7 but will only
+    have effect when the interface is in a non-trunking mode.
+    S2(config-if-range)#ex
+    S2(config)#
+
+    S3(config)#interface range fa0/6-7
+    S3(config-if-range)#sp
+    S3(config-if-range)#spa
+    S3(config-if-range)#spanning-tree p
+    S3(config-if-range)#spanning-tree portfast 
+    %Warning: portfast should only be enabled on ports connected to a single
+    host. Connecting hubs, concentrators, switches, bridges, etc... to this
+    interface  when portfast is enabled, can cause temporary bridging loops.
+    Use with CAUTION
+
+    %Portfast has been configured on FastEthernet0/6 but will only
+    have effect when the interface is in a non-trunking mode.
+    %Warning: portfast should only be enabled on ports connected to a single
+    host. Connecting hubs, concentrators, switches, bridges, etc... to this
+    interface  when portfast is enabled, can cause temporary bridging loops.
+    Use with CAUTION
+
+    %Portfast has been configured on FastEthernet0/7 but will only
+    have effect when the interface is in a non-trunking mode.
+    S3(config-if-range)#ex
+    S3(config)#
+
+### Шаг 5. Включение BPDU Guard на портах ПК
+
+    S1(config)#interface range fa0/6-8
+    S1(config-if-range)#spanning-tree bpduguard enable 
+    S1(config-if-range)#ex
+    S1(config)#
+
+    S2(config)#interface range fa0/6-7
+    S2(config-if-range)#spanning-tree bpduguard enable 
+    S2(config-if-range)#ex
+    S2(config)#
+
+    S3(config)#interface range fa0/6-7
+    S3(config-if-range)#spanning-tree bpduguard enable 
+    S3(config-if-range)#ex
+    S3(config)#
+
+### Шаг 6. Проверка итоговых конфигураций
+
+    S1#show interfaces trunk 
+    Port        Mode         Encapsulation  Status        Native vlan
+    Fa0/1       on           802.1q         trunking      1000
+    Fa0/2       on           802.1q         trunking      1000
+
+    Port        Vlans allowed on trunk
+    Fa0/1       10,20,30,40,50,1000
+    Fa0/2       10,20,30,40,50,1000
+
+    Port        Vlans allowed and active in management domain
+    Fa0/1       10,20,30,50,1000
+    Fa0/2       10,20,30,50,1000
+
+    Port        Vlans in spanning tree forwarding state and not pruned
+    Fa0/1       10,20,30,50,1000
+    Fa0/2       10,20,30,50,1000
+    S1#show spanning-tree vlan 20
+    VLAN0020
+    Spanning tree enabled protocol ieee
+    Root ID    Priority    24596
+             Address     00D0.BC50.9A25
+             This bridge is the root
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+    Bridge ID  Priority    24596  (priority 24576 sys-id-ext 20)
+             Address     00D0.BC50.9A25
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+    Interface        Role Sts Cost      Prio.Nbr Type
+    ---------------- ---- --- --------- -------- --------------------------------
+    Fa0/6            Desg FWD 19        128.6    P2p
+    Fa0/1            Desg FWD 19        128.1    P2p
+    Fa0/2            Desg FWD 19        128.2    P2p
+
+    S2#show interfaces trunk 
+    Port        Mode         Encapsulation  Status        Native vlan
+    Fa0/1       on           802.1q         trunking      1000
+    Fa0/2       on           802.1q         trunking      1000
+
+    Port        Vlans allowed on trunk
+    Fa0/1       10,20,30,40,50,1000
+    Fa0/2       10,20,30,40,50,1000
+
+    Port        Vlans allowed and active in management domain
+    Fa0/1       10,20,30,40,50,1000
+    Fa0/2       10,20,30,40,50,1000
+
+    Port        Vlans in spanning tree forwarding state and not pruned
+    Fa0/1       10,20,30,40,50,1000
+    Fa0/2       40
+    S2#show spanning-tree vlan 20
+    VLAN0020
+    Spanning tree enabled protocol ieee
+    Root ID    Priority    24596
+             Address     00D0.BC50.9A25
+             Cost        19
+             Port        1(FastEthernet0/1)
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+    Bridge ID  Priority    28692  (priority 28672 sys-id-ext 20)
+             Address     00E0.8FBD.0AA1
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+    Interface        Role Sts Cost      Prio.Nbr Type
+    ---------------- ---- --- --------- -------- --------------------------------
+    Fa0/6            Desg FWD 19        128.6    P2p
+    Fa0/1            Root FWD 19        128.1    P2p
+    Fa0/2            Altn BLK 19        128.2    P2p
+
+    S3#show interfaces trunk
+    Port      Mode     Encapsulation  Status      Native vlan
+    Fa0/5     on       802.1q         trunking    1000
+
+    Port      Vlans allowed on trunk
+    Fa0/5     110,120,140,1000
+
+    Port      Vlans allowed and active in management domain
+    Fa0/5     110,120,140,1000
+
+    Port      Vlans in spanning tree forwarding state and not pruned
+    Fa0/5     110,120,140,1000
+
 ## Часть 3. Настройка IPv4 и Router-on-a-Stick
 ### Шаг 1. Настройка интерфейсов на R1
+
+    R1>
+    R1>en
+    R1#conf t
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    R1(config)#int
+    R1(config)#interface 
+    R1(config)#interface 
+    R1(config)#interface 
+    R1(config)#interface g0/0
+    %Invalid interface type and number
+    R1(config)#
+    R1(config)#end
+    R1#vlan database
+    % Warning: It is recommended to configure VLAN from config mode,
+    as VLAN database mode is being deprecated. Please consult user
+    documentation for configuring VTP/VLAN in config mode.
+
+    R1(vlan)#
+    %SYS-5-CONFIG_I: Configured from console by console
+
+    R1(vlan)#exit
+    APPLY completed.
+    Exiting....
+    R1#vlan database
+    % Warning: It is recommended to configure VLAN from config mode,
+      as VLAN database mode is being deprecated. Please consult user
+      documentation for configuring VTP/VLAN in config mode.
+
+    R1(vlan)#
+    R1(vlan)#exit
+    APPLY completed.
+    Exiting....
+    R1#configure terminal
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    R1(config)#interface GigabitEthernet0/0/0
+    R1(config-if)#
+    R1(config-if)#exit
+    R1(config)#interface GigabitEthernet0/0/0
+    R1(config-if)#de
+    R1(config-if)#des
+    R1(config-if)#description LINK_TO_R3
+    R1(config-if)#ip ad
+    R1(config-if)#ip address 209.165.200.230 255.255.255.248
+    R1(config-if)#no sh
+    R1(config-if)#no shutdown 
+
+    R1(config-if)#
+    %LINK-5-CHANGED: Interface GigabitEthernet0/0/0, changed state to up
+    ex
+    R1(config)#int
+    R1(config)#interface g0/0/1
+    R1(config-if)#des
+    R1(config-if)#description TRUNK_TO_S1
+    R1(config-if)#no ip add
+    R1(config-if)#no ip address 
+    R1(config-if)#no sh
+    R1(config-if)#no shutdown 
+
+    R1(config-if)#
+    %LINK-5-CHANGED: Interface GigabitEthernet0/0/1, changed state to up
+    ex
+    R1(config)#interface g0/0/1.10
+    R1(config-subif)#
+    %LINK-5-CHANGED: Interface GigabitEthernet0/0/1.10, changed state to up
+
+    R1(config-subif)#des
+    R1(config-subif)#description VLAN10_MANAGEMENT
+    R1(config-subif)#en
+    R1(config-subif)#encapsulation do
+    R1(config-subif)#encapsulation dot1Q  10
+    R1(config-subif)#ip
+    R1(config-subif)#ip ad
+    R1(config-subif)#ip address 192.168.10.1 255.255.255.0
+    R1(config-subif)#ex
+    R1(config)#interface g0/0/1.20
+    R1(config-subif)#
+    %LINK-5-CHANGED: Interface GigabitEthernet0/0/1.20, changed state to up
+
+    R1(config-subif)#description VLAN20_ADMINISTRATION
+    R1(config-subif)#encapsulation dot1Q  20
+    R1(config-subif)#ip add
+    R1(config-subif)#ip address 192.168.20.1 255.255.255.0
+    R1(config-subif)#ex
+    R1(config)#interface g0/0/1.30
+    R1(config-subif)#
+    %LINK-5-CHANGED: Interface GigabitEthernet0/0/1.30, changed state to up
+    description VLAN30_USERS
+    R1(config-subif)#encapsulation dot1Q  30
+    R1(config-subif)#ip address 192.168.30.1 255.255.255.0
+    R1(config-subif)#ex
+    R1(config)#interface g0/0/1.40
+    R1(config-subif)#
+    %LINK-5-CHANGED: Interface GigabitEthernet0/0/1.40, changed state to up
+
+    R1(config-subif)#de
+    R1(config-subif)#des
+    R1(config-subif)#description VLAN40_GUEST
+    R1(config-subif)#encapsulation dot1Q  40
+    R1(config-subif)#ip address 192.168.40.1 255.255.255.0
+    R1(config-subif)#ex
+    R1(config)#in
+    R1(config)#interface g0/0/1.50
+    R1(config-subif)#
+    %LINK-5-CHANGED: Interface GigabitEthernet0/0/1.50, changed state to up
+
+    R1(config-subif)#des
+    R1(config-subif)#description VLAN50_OSPF_TRANSIT
+    R1(config-subif)#enca
+    R1(config-subif)#encapsulation d
+    R1(config-subif)#encapsulation dot1Q 50
+    R1(config-subif)#ip add
+    R1(config-subif)#ip address 10.255.0.1 255.255.255.252
+    R1(config-subif)#ex
+    R1(config)#int
+    R1(config)#interface g0/0/1.1000
+    R1(config-subif)#
+    %LINK-5-CHANGED: Interface GigabitEthernet0/0/1.1000, changed state to up
+
+    R1(config-subif)#des
+    R1(config-subif)#description NATIVE_VLAN
+    R1(config-subif)#enca
+    R1(config-subif)#encapsulation do
+    R1(config-subif)#encapsulation dot1Q 1000 native
+    R1(config-subif)#no ip add
+    R1(config-subif)#no ip address 
+    R1(config-subif)#ex
+    R1(config)#
+
 ### Шаг 2. Настройка интерфейсов на R2
+
+    R2(config)#int
+    R2(config)#interface g0/0/0
+    R2(config-if)#description OSPF_TRANSIT_TO_R1
+    R2(config-if)#ip address 10.255.0.2 255.255.255.252
+    R2(config-if)#no sh
+    R2(config-if)#ex
+    R2(config)#interface g0/0/1.110
+    R2(config-subif)#des
+    R2(config-subif)#description  VLAN_110_MANAGEMENT
+    R2(config-subif)#enc
+    R2(config-subif)#encapsulation d
+    R2(config-subif)#encapsulation dot1Q 110
+    R2(config-subif)#ip add
+    R2(config-subif)#ip address 192.168.110.1 255.255.255.0
+    R2(config-subif)#ex
+    R2(config)#interface g0/0/1.120
+    R2(config-subif)#description  VLAN_120_USERS
+    R2(config-subif)#enc
+    R2(config-subif)#encapsulation d
+    R2(config-subif)#encapsulation dot1Q 120
+    R2(config-subif)#ipa
+    R2(config-subif)#ipa
+    R2(config-subif)#ip add
+    R2(config-subif)#ip address 192.168.120.1 255.255.255.0
+    R2(config-subif)#ex
+    R2(config)#interface g0/0/1.1000
+    R2(config-subif)#desc
+    R2(config-subif)#description NATIVE_VLAN
+    R2(config-subif)#enc
+    R2(config-subif)#encapsulation d
+    R2(config-subif)#encapsulation dot1Q 1000 native
+    R2(config-subif)#no ip add
+    R2(config-subif)#no ip address 
+    R2(config-subif)#ex
+    R2(config)#
+
 ### Шаг 3. Настройка интерфейсов на R3
-### Шаг 4. Настрйока Management VLAN на коммутаторах
+
+    R3>en
+    R3#conf
+    Configuring from terminal, memory, or network [terminal]? 
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    R3(config)#int
+    R3(config)#interface g0/0/0
+    R3(config-if)#des
+    R3(config-if)#description  LINKE_TO_R1
+    R3(config-if)#ip add
+    R3(config-if)#ip address 209.165.200.225 255.255.255.248
+    R3(config-if)#no sh
+
+    R3(config-if)#
+    %LINK-5-CHANGED: Interface GigabitEthernet0/0/0, changed state to up
+
+    %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0/0, changed state to up
+
+    R3(config-if)#ex
+    R3(config)#interface loopback 1
+
+    R3(config-if)#
+    %LINK-5-CHANGED: Interface Loopback1, changed state to up
+
+    %LINEPROTO-5-UPDOWN: Line protocol on Interface Loopback1, changed state to up
+
+    R3(config-if)#description INTERNET_TEST_NETWORK
+    R3(config-if)#ip address 209.165.200.1 255.255.255.224
+    R3(config-if)#ex
+    R3(config)#
+
+### Шаг 4. Настройка Management VLAN на коммутаторах
+
+    S1>en
+    S1#conf t
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    S1(config)#int
+    S1(config)#interface vlan 10
+    S1(config-if)#
+    %LINK-5-CHANGED: Interface Vlan10, changed state to up
+
+    %LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan10, changed state to up
+
+    S1(config-if)#description MANAGEMENT
+    S1(config-if)#ip address 192.168.10.2 255.255.255.0
+    S1(config-if)#no shutdown 
+    S1(config-if)#ex
+    S1(config)#ip default-gateway 192.168.10.1
+    S1(config)#
+
+    S2>en
+    S2#conf t
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    S2(config)#interface vlan 10
+    S2(config-if)#
+    %LINK-5-CHANGED: Interface Vlan10, changed state to up
+
+    %LINEPROTO-5-UPDOWN: Line protocol on Interface Vlan10, changed state to up
+    S2(config-if)#description MANAGMENT
+    S2(config-if)#ip address 192.168.10.3 255.255.255.0
+    S2(config-if)#no sh
+    S2(config-if)#ex
+    S2(config)#ip default-gateway 192.168.10.1
+    S2(config)#ex
+
+    S3>
+    S3>en
+    S3#conf t
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    S3(config)#interface vlan 10
+    S3(config-if)#description MANAGMENT
+    S3(config-if)#ip address 192.168.110.2 255.255.255.0
+    S3(config-if)#no sh
+    S3(config-if)#ex
+
 ### Шаг 5. Проверки сетевой связанности маршрутизаторов и коммутаторов
+
+    S1#ping 192.168.10.1
+    Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to 192.168.10.1, timeout is 2 seconds:
+    .!!!!
+    Success rate is 80 percent (4/5), round-trip min/avg/max = 0/0/0 ms
+
+
+    S1#ping 192.168.10.3
+    Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to 192.168.10.3, timeout is 2 seconds:
+    .!!!!
+    Success rate is 60 percent (3/5), round-trip min/avg/max = 0/0/0 ms
+
+
+    S2#ping 192.168.10.1
+    Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to 192.168.10.1, timeout is 2 seconds:
+    .!!!!
+    Success rate is 80 percent (4/5), round-trip min/avg/max = 0/0/0 ms
+
+    S2#ping 192.168.10.2
+    Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to 192.168.10.2, timeout is 2 seconds:
+    .!!!!
+    Success rate is 60 percent (3/5), round-trip min/avg/max = 0/0/0 ms\
+
+    S3#ping 192.168.110.1
+    Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to 192.168.110.1, timeout is 2 seconds:
+    .!!!!
+    Success rate is 60 percent (3/5), round-trip min/avg/max = 0/0/0 ms\
+
+    R1#ping 10.255.0.2
+    Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to 10.255.0.2, timeout is 2 seconds:
+    .!!!!
+    Success rate is 60 percent (3/5), round-trip min/avg/max = 0/0/0 ms\
+
+    R1#ping 209.165.200.225
+    Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to 209.165.200.225, timeout is 2 seconds:
+    .!!!!
+    Success rate is 60 percent (3/5), round-trip min/avg/max = 0/0/0 ms\
+
+    R2#ping 10.255.0.1
+    Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to 10.255.0.1, timeout is 2 seconds:
+    .!!!!
+    Success rate is 60 percent (3/5), round-trip min/avg/max = 0/0/0 ms\
+
+    R3#ping 209.165.200.230
+    Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to 209.165.200.230, timeout is 2 seconds:
+    .!!!!
+    Success rate is 60 percent (3/5), round-trip min/avg/max = 0/0/0 ms\
+
+
 ## Часть 4. Настройка DHCPv4
 ### Шаг 1. Исключение служебных адресов и создание пулов на R1
 ### Шаг 2. Исключение служебных адресов и создание пулов на R2
