@@ -25,13 +25,7 @@
     - [Шаг 1. Исключение служебных адресов и создание пулов на R1](#шаг-1-исключение-служебных-адресов-и-создание-пулов-на-r1)
     - [Шаг 2. Исключение служебных адресов и создание пулов на R2](#шаг-2-исключение-служебных-адресов-и-создание-пулов-на-r2)
     - [Шаг 3. Ping шлюзов с ПК](#шаг-3-ping-шлюзов-с-пк)
-  - [Часть 5. Настройка IPv6, SLAAC и DHCPv6](#часть-5-настройка-ipv6-slaac-и-dhcpv6)
-    - [Шаг 1. IPv6-маршрутизация на R1 и R2](#шаг-1-ipv6-маршрутизация-на-r1-и-r2)
-    - [Шаг 2. Настройка адресов IPv6, VLAN и DHCPv6 на R1](#шаг-2-настройка-адресов-ipv6-vlan-и-dhcpv6-на-r1)
-    - [Шаг 3. Настройка адресов IPv6, VLAN и DHCPv6 на R2](#шаг-3-настройка-адресов-ipv6-vlan-и-dhcpv6-на-r2)
-    - [Шаг 4. Проверка DHCPv6 на маршрутизаторах](#шаг-4-проверка-dhcpv6-на-маршрутизаторах)
-    - [Шаг 5.  Проверка таблиц IPv6-маршрутизации](#шаг-5--проверка-таблиц-ipv6-маршрутизации)
-  - [Часть 6. Статическая и динамическая маршрутизация](#часть-6-статическая-и-динамическая-маршрутизация)
+  - [Часть 5. Статическая и динамическая маршрутизация](#часть-6-статическая-и-динамическая-маршрутизация)
     - [Шаг 1. Статический маршрут по умолчанию на R1](#шаг-1-статический-маршрут-по-умолчанию-на-r1)
     - [Шаг 2. Настройка OSPF на R1](#шаг-2-настройка-ospf-на-r1)
     - [Шаг 3. Отключение OSPF Hello-пакеты в пользовательских VLAN](#шаг-3-отключение-ospf-hello-пакеты-в-пользовательских-vlan)
@@ -42,7 +36,7 @@
     - [Шаг 8. Настройка IPv6-маршрутизации на R1/R2](#шаг-8-настройка-ipv6-маршрутизации-на-r1r2)
     - [Шаг 9. Проверка IPv6-маршрутизации на ПК](#шаг-9-проверка-ipv6-маршрутизации-на-пк)
     - [Шаг 10. Итоговая проверка OSPF](#шаг-10-итоговая-проверка-ospf)
-  - [Часть 7. ACL](#часть-7-acl)
+  - [Часть 6. ACL](#часть-7-acl)
     - [Шаг 1. Определение политик безопасности](#шаг-1-определение-политик-безопасности)
     - [Шаг 2. ACL для HQ Guest](#шаг-2-acl-для-hq-guest)
     - [Шаг 3. ACL для HQ Users](#шаг-3-acl-для-hq-users)
@@ -51,25 +45,22 @@
     - [Шаг 6. Проверка HQ Guest](#шаг-6-проверка-hq-guest)
     - [Шаг 7. Проверка Branch Guest](#шаг-7-проверка-branch-guest)
     - [Шаг 8. Проверка Users](#шаг-8-проверка-users)
-  - [Часть 8. Настройка NAT/PAT](#часть-8-настройка-natpat)
+  - [Часть 7. Настройка NAT/PAT](#часть-8-настройка-natpat)
     - [Шаг 1. Внешний NAT-интерфейс](#шаг-1-внешний-nat-интерфейс)
     - [Шаг 2. Внутренние NAT-интерфейсы](#шаг-2-внутренние-nat-интерфейсы)
     - [Шаг 3. ACL для адресов NAT](#шаг-3-acl-для-адресов-nat)
     - [Шаг 4. PAT через R1](#шаг-4-pat-через-r1)
     - [Шаг 5. Проверка PAT](#шаг-5-проверка-pat)
     - [Шаг 6. Static NAT для PC-A](#шаг-6-static-nat-для-pc-a)
-  - [Часть 9. Настройка и проверка CDP и LLDP](#часть-9-настройка-и-проверка-cdp-и-lldp)
+  - [Часть 8. Настройка и проверка CDP и LLDP](#часть-9-настройка-и-проверка-cdp-и-lldp)
     - [Шаг 1. Проверка работы CDP на роутерах и маршрутизаторах](#шаг-1-проверка-работы-cdp-на-роутерах-и-маршрутизаторах)
     - [Шаг 2. Отключение CDP на всех устройствах для проверки LLDP](#шаг-2-отключение-cdp-на-всех-устройствах-для-проверки-lldp)
     - [Шаг 3. Проверка LLDP](#шаг-3-проверка-lldp)
-  - [Часть 10. Настройка NTP](#часть-10-настройка-ntp)
+  - [Часть 9. Настройка NTP](#часть-10-настройка-ntp)
     - [Шаг 1. Проверка и настройка R1 как NTP Master](#шаг-1-проверка-и-настройка-r1-как-ntp-master)
     - [Шаг 2. Настройка клиентов](#шаг-2-настройка-клиентов)
     - [Шаг 3. Проверка работы NTP](#шаг-3-проверка-работы-ntp)
-  - [Часть 11. Защищённое удалённое управление (SSH)](#часть-11-защищённое-удалённое-управление-ssh)
-    - [Шаг 1. Настройка SSH на R1/2 и S1/2/3](#шаг-1-настройка-ssh-на-r12-и-s123)
-    - [Шаг 2. Ограничение SSH административной сетью](#шаг-2-ограничение-ssh-административной-сетью)
-    - [Шаг 3. Проверка SSH и ограничений](#шаг-3-проверка-ssh-и-ограничений)
+
 ## Топология 
 
 ![alt text](topology.png)
@@ -1117,170 +1108,594 @@ R2 — филиал
 
 ![alt text](https://github.com/Gleb02/labs_otus/blob/main/project/image/Ping%20PC-G%20getway.png)
 
-## Часть 5. Настройка IPv6, SLAAC и DHCPv6
-Головной офис 
-VLAN | Назначение	     | IPv6‑сеть            |	Шлюз              |  Метод клиента      | 
------|-----------------|----------------------|-------------------|---------------------|
-10   | Management	     | 2001:DB8:10:10::/64	| 2001:DB8:10:10::1 | Static              |
-20   | Administration  | 2001:DB8:10:20::/64	| 2001:DB8:10:20::1 |	DHCPv6
-30   | Users	         | 2001:DB8:10:30::/64	| 2001:DB8:10:30::1	| SLAAC
-40   | Guest           | 2001:DB8:10:40::/64	|2001:DB8:10:40::1	| SLAAC
-50 	 | OSPF Transit	   | 2001:DB8:FFFF:12::/64|	-                 |	Static
+## Часть 5. Статическая и динамическая маршрутизация
 
-Филиал
-VLAN |	Назначение	| IPv6‑сеть            |	Шлюз	             | Метод клиента    |
------|--------------|----------------------|---------------------|------------------|
-110	 | Management	  | 2001:DB8:20:110::/64 |	2001:DB8:20:110::1 | Static           |
-120  | Users        |	2001:DB8:20:120::/64 |	2001:DB8:20:120::1 | DHCPv6           |
-140	 | Guest	      | 2001:DB8:20:140::/64 | 2001:DB8:20:140::1  |	SLAAC           |
--------------------------------------------------------------------------------------
-### Шаг 1. IPv6-маршрутизация на R1 и R2
+Логика маршрутизации
 
-    R1>en
+              209.165.200.1
+                  R3 Lo1
+                    |
+                    |
+                   R3
+              209.165.200.225
+                    |
+            Static Default Route
+                    |
+              209.165.200.230
+                   R1
+                    |
+              10.255.0.1
+                    |
+                OSPF Area 0
+                    |
+              10.255.0.2
+                   R2
+### Шаг 1. Статический маршрут по умолчанию на R1
+
+R1>enable
+R1#conf t
+Enter configuration commands, one per line. End with CNTL/Z.
+R1(config)#ip route 0.0.0.0 0.0.0.0 209.165.200.225
+R1(config)#end
+R1#
+%SYS-5-CONFIG_I: Configured from console by console
+R1#show ip route
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is 209.165.200.225 to network 0.0.0.0
+
+         10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+    C       10.255.0.0/30 is directly connected, GigabitEthernet0/0/1.50
+    L       10.255.0.1/32 is directly connected, GigabitEthernet0/0/1.50
+     192.168.10.0/24 is variably subnetted, 2 subnets, 2 masks
+    C       192.168.10.0/24 is directly connected, GigabitEthernet0/0/1.10
+    L       192.168.10.1/32 is directly connected, GigabitEthernet0/0/1.10
+     192.168.20.0/24 is variably subnetted, 2 subnets, 2 masks
+    C       192.168.20.0/24 is directly connected, GigabitEthernet0/0/1.20
+    L       192.168.20.1/32 is directly connected, GigabitEthernet0/0/1.20
+     192.168.30.0/24 is variably subnetted, 2 subnets, 2 masks
+    C       192.168.30.0/24 is directly connected, GigabitEthernet0/0/1.30
+    L       192.168.30.1/32 is directly connected, GigabitEthernet0/0/1.30
+     192.168.40.0/24 is variably subnetted, 2 subnets, 2 masks
+    C       192.168.40.0/24 is directly connected, GigabitEthernet0/0/1.40
+    L       192.168.40.1/32 is directly connected, GigabitEthernet0/0/1.40
+     209.165.200.0/24 is variably subnetted, 2 subnets, 2 masks
+    C       209.165.200.224/29 is directly connected, GigabitEthernet0/0/0
+    L       209.165.200.230/32 is directly connected, GigabitEthernet0/0/0
+    S*   0.0.0.0/0 [1/0] via 209.165.200.225
+    R1#
+    R1#ping 209.165.200.1
+    Type escape sequence to abort.
+    Sending 5, 100-byte ICMP Echos to 209.165.200.1, timeout is 2 seconds:
+    !!!!!
+    Success rate is 80 percent (4/5), round-trip min/avg/max = 0/0/0 ms
+   
+### Шаг 2. Настройка OSPF на R1
+
+  OSPF process ID = 56
+
+  Area = 0
+
+  Router ID R1 = 1.1.1.1
+
+  Router ID R2 = 2.2.2.2
+
     R1#conf t
     Enter configuration commands, one per line. End with CNTL/Z.
-    R1(config)#ipv6 unicast-routing
-    R1(config)#
+    R1(config)#router ospf 56
+    R1(config-router)#router-id 1.1.1.1
+    R1(config-router)#network 192.168.10.0 0.0.0.255 area 0
+    R1(config-router)#network 192.168.20.0 0.0.0.255 area 0
+    R1(config-router)#network 192.168.30.0 0.0.0.255 area 0
+    R1(config-router)#network 192.168.40.0 0.0.0.255 area 0
+    R1(config-router)#network 10.255.0.0 0.0.0.3 area 0
+    R1(config-router)#
+
+###  Шаг 3. Отключение OSPF Hello-пакеты в пользовательских VLAN
+
+    R1(config-router)#passive-interface default
+    R1(config-router)#no passive-interface g0/0/1/50
+
+###  Шаг 4. Маршрут по умолчанию через OSPF
+
+R1(config-router)#default-information originate
+R1(config-router)#ex
+
+### Шаг 5. Настройте OSPF на R2
+
+    R2>enable
+    R2#conf t
+    Enter configuration commands, one per line. End with CNTL/Z.
+    R2(config)#router ospf 56
+    R2(config-router)#router-id 2.2.2.2
+    R2(config-router)#network 192.168.110.0 0.0.0.255 area 0
+    R2(config-router)#network 192.168.120.0 0.0.0.255 area 0
+    R2(config-router)#network 192.168.140.0 0.0.0.255 area 0
+    R2(config-router)#network 10.255.0.0 0.0.0.3 area 0
+    R2(config-router)#passive-interface default
+    R2(config-router)#no passive-interface g0/0/0
+    R2(config-router)#exit
+    R2(config)#end
+    R2#
+    %SYS-5-CONFIG_I: Configured from console by console
+    R2#
+    01:02:01: %OSPF-5-ADJCHG: Process 56, Nbr 1.1.1.1 on GigabitEthernet0/0/0 from LOADING to FULL, Loading Done
+    R2#show ip ospf neighbor
+    
+    Neighbor ID     Pri   State           Dead Time   Address         Interface
+    1.1.1.1         1     FULL/DR         00:00:36    10.255.0.1      GigabitEthernet0/0/0
+    R2#
+
+### Шаг 6. Проверка OSPF-маршрутов на маршрутизаторах
+    R2#show ip route ospf
+    O    192.168.10.0 [110/2] via 10.255.0.1, 00:01:16, GigabitEthernet0/0/0
+    O    192.168.20.0 [110/2] via 10.255.0.1, 00:01:16, GigabitEthernet0/0/0
+    O    192.168.30.0 [110/2] via 10.255.0.1, 00:01:16, GigabitEthernet0/0/0
+    O    192.168.40.0 [110/2] via 10.255.0.1, 00:01:16, GigabitEthernet0/0/0
+    O*E2 0.0.0.0/0 [110/1] via 10.255.0.1, 00:01:16, GigabitEthernet0/0/0
+
+### Шаг 10. Итоговая проверка OSPF
+
+R1#show ip ospf neighbor
+
+    Neighbor ID     Pri   State           Dead Time   Address         Interface
+    2.2.2.2         1     FULL/BDR        00:00:36    10.255.0.2      GigabitEthernet0/0/1.50
+    
+    R1#show ip ospf interface brief
+    Interface   PID   Area   IP Address/Mask          Cost  State   Nbrs F/C
+    Gig         56    0      192.168.10.1/255.255.255.0 1     WAIT    0/0
+    Gig         56    0      192.168.20.1/255.255.255.0 1     WAIT    0/0
+    Gig         56    0      192.168.30.1/255.255.255.0 1     WAIT    0/0
+    Gig         56    0      192.168.40.1/255.255.255.0 1     WAIT    0/0
+    Gig         56    0      10.255.0.1/255.255.255.252 1     DR      0/0
+    
+    R1#show ip protocols
+    Routing Protocol is "ospf 56"
+    Outgoing update filter list for all interfaces is not set
+    Incoming update filter list for all interfaces is not set
+    Router ID 1.1.1.1
+    It is an autonomous system boundary router
+    Redistributing External Routes from,
+    Number of areas in this router is 1. 1 normal 0 stub 0 nssa
+    Maximum path: 4
+    Routing for Networks:
+      192.168.10.0 0.0.0.255 area 0
+      192.168.20.0 0.0.0.255 area 0
+      192.168.30.0 0.0.0.255 area 0
+      192.168.40.0 0.0.0.255 area 0
+      10.255.0.0 0.0.0.3 area 0
+    Passive Interface(s):
+      Vlan1
+      GigabitEthernet0/0/0
+      GigabitEthernet0/0/1
+      GigabitEthernet0/0/1.10
+      GigabitEthernet0/0/1.20
+      GigabitEthernet0/0/1.30
+      GigabitEthernet0/0/1.40
+      GigabitEthernet0/0/1.1000
+    Routing Information Sources:
+
+## Часть 6. ACL
+### Шаг 1. Определение политик безопасности
+
+| № | Источник | Назначение | Политика |
+|---:|---|---|---|
+| 1 | HQ Guest VLAN 40 | Все корпоративные IPv4-сети | **Deny** |
+| 2 | Branch Guest VLAN 140 | Все корпоративные IPv4-сети | **Deny** |
+| 3 | HQ Guest / Branch Guest | Internet | **Permit** |
+| 4 | HQ Users VLAN 30 | Management VLAN 10 и 110 по SSH | **Deny TCP/22** |
+| 5 | Branch Users VLAN 120 | Management VLAN 10 и 110 по SSH | **Deny TCP/22** |
+| 6 | Administration VLAN 20 | Management | **Permit** |
+| 7 | Остальной пользовательский трафик | Разрешённые сети | **Permit** |
+
+### Шаг 2. ACL для HQ Guest
+
+    R1(config)#ip access-list extended HQ_GUEST_IN
+    R1(config-ext-nacl)#permit udp any eq bootpc any eq bootps
+    R1(config-ext-nacl)#permit icmp 192.168.40.0 0.0.0.255 host 192.168.40.1 echo
+    R1(config-ext-nacl)#deny ip 192.168.40.0 0.0.0.255 192.168.0.0 0.0.255.255
+    R1(config-ext-nacl)#permit ip 192.168.40.0 0.0.0.255 any
+    R1(config-ext-nacl)#exit
+    R1(config)#interface g0/0/1.40
+    R1(config-subif)#ip access-group HQ_GUEST_IN in
+    R1(config-subif)#exit
+
+### Шаг 3. ACL для HQ Users
+
+    R1(config)#ip access-list extended HQ_USERS_IN
+    R1(config-ext-nacl)#permit udp any eq bootpc any eq bootps
+    R1(config-ext-nacl)#deny tcp 192.168.30.0 0.0.0.255 192.168.10.0 0.0.0.255 eq 22
+    R1(config-ext-nacl)#deny tcp 192.168.30.0 0.0.0.255 192.168.110.0 0.0.0.255 eq 22
+    R1(config-ext-nacl)#permit ip 192.168.30.0 0.0.0.255 any
+    R1(config-ext-nacl)#exit
+    R1(config)#interface g0/0/1.30
+    R1(config-subif)#ip access-group HQ_USERS_IN in
+    R1(config-subif)#exit
+
+### Шаг 4. ACL для Branch Guest
+
+    R2(config)#ip access-list extended BRANCH_GUEST_IN
+    R2(config-ext-nacl)#permit udp any eq bootpc any eq bootps
+    R2(config-ext-nacl)#permit icmp 192.168.140.0 0.0.0.255 host 192.168.140.1 echo
+    R2(config-ext-nacl)#deny ip 192.168.140.0 0.0.0.255 192.168.0.0 0.0.255.255
+    R2(config-ext-nacl)#permit ip 192.168.140.0 0.0.0.255 any
+    R2(config-ext-nacl)#exit
+    R2(config)#interface g0/0/1.140
+    R2(config-subif)#ip access-group BRANCH_GUEST_IN in
+    R2(config-subif)#exit
+
+### Шаг 5. ACL для Branch Users
+
+  R2(config)#ip access-list extended BRANCH_USERS_IN
+  R2(config-ext-nacl)#permit udp any eq bootpc any eq bootps
+  R2(config-ext-nacl)#deny tcp 192.168.120.0 0.0.0.255 192.168.110.0 0.0.0.255 eq 22
+  R2(config-ext-nacl)#deny tcp 192.168.120.0 0.0.0.255 192.168.10.0 0.0.0.255 eq 22
+  R2(config-ext-nacl)#permit ip 192.168.120.0 0.0.0.255 any
+  R2(config-ext-nacl)#exit
+  R2(config)#interface g0/0/1.120
+  R2(config-subif)#ip access-group BRANCH_USERS_IN in
+  R2(config-subif)#exit
+
+## Часть 7. Настройка NAT/PAT
+
+Логическая схема 
+
+                INTERNET
+                    |
+                   R3
+                    |
+     209.165.200.224/29
+                    |
+                   R1
+            NAT / PAT EDGE
+               /         \
+              /           \
+  209.165.200.229       209.165.200.230
+      Static NAT             PAT
+          |                   |
+        PC-A              остальные
+
+### Шаг 1. Внешний NAT-интерфейс
+
+    R1#conf t
+    Enter configuration commands, one per line. End with CNTL/Z.
+    R1(config)#interface g0/0/0
+    R1(config-if)#ip nat outside
+    R1(config-if)#exit
+
+### Шаг 2. Внутренние NAT-интерфейсы 
+
+    R1(config)#interface g0/0/1.10
+    R1(config-subif)#ip nat inside
+    R1(config-subif)#exit
+    R1(config)#interface g0/0/1.20
+    R1(config-subif)#ip nat inside
+    R1(config-subif)#exit
+    R1(config)#interface g0/0/1.30
+    R1(config-subif)#ip nat inside
+    R1(config-subif)#exit
+    R1(config)#interface g0/0/1.40
+    R1(config-subif)#ip nat inside
+    R1(config-subif)#exit
+    R1(config)#interface g0/0/1.50
+    R1(config-subif)#ip nat inside
+    R1(config-subif)#exit
+
+### Шаг 3. ACL для адресов NAT
+
+    R1(config)#access-list 1 permit 192.168.0.0 0.0.255.255
+
+### Шаг 4. PAT через R1
+
+    R1(config)#ip nat inside source list 1 interface g0/0/0 overload
+
+### Шаг 5. Проверка PAT
+
+    R1#show ip nat translations
+    Pro  Inside global      Inside local       Outside local      Outside global
+    icmp 209.165.200.230:13 192.168.30.10:13   209.165.200.1:13   209.165.200.1:13
+    icmp 209.165.200.230:14 192.168.30.10:14   209.165.200.1:14   209.165.200.1:14
+    icmp 209.165.200.230:15 192.168.30.10:15   209.165.200.1:15   209.165.200.1:15
+    icmp 209.165.200.230:16 192.168.30.10:16   209.165.200.1:16   209.165.200.1:16
+    
+    R1#show ip nat statistics
+    Total translations: 0 (0 static, 0 dynamic, 0 extended)
+    Outside Interfaces: GigabitEthernet0/0/0
+    Inside Interfaces: GigabitEthernet0/0/1.10 , GigabitEthernet0/0/1.20 , GigabitEthernet0/0/1.30 , GigabitEthernet0/0/1.40 , GigabitEthernet0/0/1.50
+    Hits: 16  Misses: 16
+    Expired translations: 16
+    Dynamic mappings:
+
+
+### Шаг 6. Static NAT для PC-A
+
+    R1#show ip nat translations
+    Pro  Inside global      Inside local       Outside local      Outside global
+    icmp 209.165.200.230:13 192.168.30.10:13   209.165.200.1:13   209.165.200.1:13
+    icmp 209.165.200.230:14 192.168.30.10:14   209.165.200.1:14   209.165.200.1:14
+    icmp 209.165.200.230:15 192.168.30.10:15   209.165.200.1:15   209.165.200.1:15
+    icmp 209.165.200.230:16 192.168.30.10:16   209.165.200.1:16   209.165.200.1:16
+    
+    R1(config)#ip nat inside source static 192.168.20.10 209.165.200.229
+    R1(config)#end
+    R1#
+    %SYS-5-CONFIG_I: Configured from console by console
+    
+    R1#show ip nat translations
+    Pro  Inside global      Inside local       Outside local      Outside global
+    ---  209.165.200.229    192.168.20.10      ---                ---
+
+    R1#show ip nat translations
+    Pro  Inside global        Inside local         Outside local        Outside global
+    icmp 209.165.200.229:1    192.168.20.10:1      209.165.200.1:1      209.165.200.1:1
+    icmp 209.165.200.229:2    192.168.20.10:2      209.165.200.1:2      209.165.200.1:2
+    icmp 209.165.200.229:2    192.168.20.10:2      209.165.200.225:2    209.165.200.225:2
+    icmp 209.165.200.229:3    192.168.20.10:3      209.165.200.1:3      209.165.200.1:3
+    icmp 209.165.200.229:3    192.168.20.10:3      209.165.200.225:3    209.165.200.225:3
+    icmp 209.165.200.229:4    192.168.20.10:4      209.165.200.1:4      209.165.200.1:4
+    icmp 209.165.200.229:4    192.168.20.10:4      209.165.200.225:4    209.165.200.225:4
+    icmp 209.165.200.229:5    192.168.20.10:5      209.165.200.225:5    209.165.200.225:5
+    ---  209.165.200.229      192.168.20.10        ---                  ---
+
+## Часть 8. Настройка и проверка CDP и LLDP
+### Шаг 1. Проверка работы CDP на роутерах и маршрутизаторах
+
+    R1#show cdp
+    Global CDP information:
+        Sending CDP packets every 60 seconds
+        Sending a holdtime value of 180 seconds
+        Sending CDPv2 advertisements is enabled
+    R1#show cdp neighbors
+    Capability Codes: R - Router, T - Trans Bridge, B - Source Route Bridge
+                      S - Switch, H - Host, I - IGMP, r - Repeater, P - Phone
+    Device ID    Local Intrfce   Holdtme   Capability   Platform   Port ID
+    R3           Gig 0/0/0       172           R        ISR4300    Gig 0/0/0
+    R1#show cdp interface
+    Vlan1 is administratively down, line protocol is down
+      Sending CDP packets every 60 seconds
+      Holdtime is 180 seconds
+    GigabitEthernet0/0/0 is up, line protocol is up
+      Sending CDP packets every 60 seconds
+      Holdtime is 180 seconds
+    GigabitEthernet0/0/1 is up, line protocol is up
+      Sending CDP packets every 60 seconds
+      Holdtime is 180 seconds
+    GigabitEthernet0/0/1.10 is up, line protocol is up
+      Sending CDP packets every 60 seconds
+      Holdtime is 180 seconds
+    GigabitEthernet0/0/1.20 is up, line protocol is up
+      Sending CDP packets every 60 seconds
+      Holdtime is 180 seconds
+    GigabitEthernet0/0/1.30 is up, line protocol is up
+      Sending CDP packets every 60 seconds
+      Holdtime is 180 seconds
+    GigabitEthernet0/0/1.40 is up, line protocol is up
+      Sending CDP packets every 60 seconds
+      Holdtime is 180 seconds
+    GigabitEthernet0/0/1.50 is up, line protocol is up
+      Sending CDP packets every 60 seconds
+      Holdtime is 180 seconds
+    GigabitEthernet0/0/1.140 is administratively down, line protocol is down
+      Sending CDP packets every 60 seconds
+      Holdtime is 180 seconds
+    GigabitEthernet0/0/1.1000 is up, line protocol is up
+      Sending CDP packets every 60 seconds
+      Holdtime is 180 seconds
+
+### Шаг 2. Отключение CDP на всех устройствах для проверки LLDP
+
+Отключение командой no cdp run в режиме конфигурации
+
+### Шаг 3. Проверка LLDP 
+
+    R1#show lldp
+    
+    Global LLDP Information:
+        Status: ACTIVE
+        LLDP advertisements are sent every 30 seconds
+        LLDP hold time advertised is 120 seconds
+        LLDP interface reinitialisation delay is 2 seconds
+    R1#show lldp neighbors
+    Capability codes:
+        (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device
+        (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other
+    Device ID           Local Intf     Hold-time   Capability      Port ID
+    R3                  Gig0/0/0       120         R               Gig0/0/0
+    S1                  Gig            120         B               Fa0/5
+    
+    Total entries displayed: 2
+
+    R2#show lldp neighbors detail
+    ------------------------------------------------------
+    Chassis id: 0040.0BCA.2D05
+    Port id: Fa0/5
+    Port Description: FastEthernet0/5
+    System Name: S2
+    System Description:
+    Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 15.0(2)SE4, RELEASE SOFTWARE (fc1)
+    Technical Support: http://cisco.com
+    Copyright (c) 1986-2013 by Cisco Systems, Inc.
+    Compiled Wed 26-Jun-13 02:49 by mnguyen
+    Time remaining: 90 seconds
+    System Capabilities: B
+    Enabled Capabilities: B
+    Management Addresses - not advertised
+    Auto Negotiation - supported, enabled
+    Physical media capabilities:
+        100baseT(FD)
+        100baseT(HD)
+        1000baseT(HD)
+    Media Attachment Unit type: 10
+    Vlan ID: 50
+    ------------------------------------------------------
+    Chassis id: 00D0.582A.6605
+    Port id: Fa0/5
+    Port Description: FastEthernet0/5
+    System Name: S3
+    System Description:
+    Cisco IOS Software, C2960 Software (C2960-LANBASEK9-M), Version 15.0(2)SE4, RELEASE SOFTWARE (fc1)
+    Technical Support: http://cisco.com
+    Copyright (c) 1986-2013 by Cisco Systems, Inc.
+    Compiled Wed 26-Jun-13 02:49 by mnguyen
+    Time remaining: 90 seconds
+    System Capabilities: B
+    Enabled Capabilities: B
+    Management Addresses - not advertised
+    Auto Negotiation - supported, enabled
+    Physical media capabilities:
+        100baseT(HD)
+        100baseT(FD)
+        1000baseT(HD)
+    Media Attachment Unit type: 10
+    Vlan ID: 1
+    
+    Total entries displayed: 2
+
+    S1#show lldp neighbors
+    Capability codes:
+        (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device
+        (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other
+    Device ID           Local Intf     Hold-time   Capability      Port ID
+    R1                  Fa0/5          120         R               Gig
+    S2                  Fa0/1          120         B               Fa0/1
+    S2                  Fa0/2          120         B               Fa0/2
+    
+    Total entries displayed: 3
+
+    S2#show lldp neighbors
+    Capability codes:
+        (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device
+        (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other
+    Device ID           Local Intf     Hold-time   Capability      Port ID
+    R2                  Fa0/5          120         R               Gig0/0/0
+    S1                  Fa0/1          120         B               Fa0/1
+    S1                  Fa0/2          120         B               Fa0/2
+    
+    Total entries displayed: 3
+    
+     S3#show lldp neighbors
+    Capability codes:
+        (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device
+        (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other
+    Device ID           Local Intf     Hold-time   Capability      Port ID
+    R2                  Fa0/5          120         R               Gig
+    
+    Total entries displayed: 1
+
+## Часть 9. Настройка NTP 
+
+Схема NTP
+                       
+                      R1
+                 NTP MASTER
+                  Stratum 4
+                /     |      \
+               /      |       \
+             S1       S2       R2
+                                \
+                                 \
+                                  S3
+
+### Шаг 1. Проверка и настройка R1 как NTP Master
+
+  R1>en
+  Rl#show clock detail
+  *1:3:50.37 UTC Mon Mar 1 1993
+  Time source is hardware calendar
+  Rl#clock set 19:01:00 27 September 2026
+  R1#conf t
+  Enter
+  configuration commands, one per line.
+  End with CNTL/Z.
+  RL (config) #ntp master 4
+  R1 (config) #exit
+  R1#
+  4SYS-5-CONFIG I: Configured from console by console
+  show ntp status
+  Clock is synchronized, stratum 4, reference is 127. 127. 1.1
+  nominal freq is 250. 0000 Hz, actual freq is 249. 9990 Hz, precision is 2**24
+  reference time is EE371396.000000BE (19:1:42.190 UTC Sun Sep 27 2026)
+  clock offset is 0.00 msec, root delay is 0.00 msec
+  root dispersion is 0.00 msec, peer dispersion is 0.12 msec.
+  loopfilter state is 'CTRL' (Normal Controlled Loop), drift is - 0.000001193 s/s system
+  poll interval is 4, last update was 10 sec ago.
+
+### Шаг 2. Настройка клиентов
+
+    S1>en
+    S1#conf t
+    Enter configuration commands, one per line. End with CNTL/Z.
+    S1(config)#ntp server 192.168.10.1
+    S1(config)#end
+    S1#
+    %SYS-5-CONFIG_I: Configured from console by console
+
+    S2>en
+    S2#conf t
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    S2(config)#ntp server 192.168.10.1
+    S2(config)#end
+    S2#
+    %SYS-5-CONFIG_I: Configured from console by console
+
+    S3>en
+    S3#conf t
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    S3(config)#ntp server 10.255.0.1
+    S3(config)#end
+    S3#
+    %SYS-5-CONFIG_I: Configured from console by console
 
     R2>en
     R2#conf t
-    Enter configuration commands, one per line. End with CNTL/Z.
-    R2(config)#ipv6 unicast-routing
-    R2(config)#
-
-### Шаг 2. Настройка адресов IPv6, VLAN и DHCPv6 на R1
-
-    R1#conf t
-    Enter configuration commands, one per line. End with CNTL/Z.
-    R1(config)#interface g0/0/1.10
-    R1(config-subif)#ipv6 address 2001:DB8:10:10::1/64
-    R1(config-subif)#ipv6 address FE80::1 link-local
-    R1(config-subif)#exit
-    R1(config)#interface g0/0/1.20
-    R1(config-subif)#ipv6 address 2001:DB8:10:20::1/64
-    R1(config-subif)#ipv6 address FE80::1 link-local
-    R1(config-subif)#exit
-    R1(config)#ipv6 dhcp pool HQ_ADMIN_V6
-    R1(config-dhcpv6)#address prefix 2001:DB8:10:20::/64
-    R1(config-dhcpv6)#exit
-    R1(config)#interface g0/0/1.20
-    R1(config-subif)#ipv6 nd managed-config-flag
-    R1(config-subif)#ipv6 dhcp server HQ_ADMIN_V6
-    R1(config-subif)#exit
-    R1(config)#interface g0/0/1.30
-    R1(config-subif)#ipv6 address 2001:DB8:10:30::1/64
-    R1(config-subif)#ipv6 address FE80::1 link-local
-    R1(config-subif)#exit
-    R1(config)#interface g0/0/1.40
-    R1(config-subif)#ipv6 address 2001:DB8:10:40::1/64
-    R1(config-subif)#ipv6 address FE80::1 link-local
-    R1(config-subif)#exit
-    R1(config)#interface g0/0/1.50
-    R1(config-subif)#ipv6 address 2001:DB8:FFFF:12::1/64
-    R1(config-subif)#ipv6 address FE80::1 link-local
-    R1(config-subif)#exit
-    R1(config)#
-
-### Шаг 3. Настройка адресов IPv6, VLAN и DHCPv6 на R2
-
-    R2(config)#interface g0/0/0
-    R2(config-if)#ipv6 address 2001:DB8:FFFF:12::2/64
-    R2(config-if)#ipv6 address FE80::2 link-local
-    R2(config-if)#exit
-    R2(config)#interface g0/0/1.110
-    R2(config-subif)#ipv6 address 2001:DB8:20:110::1/64
-    R2(config-subif)#ipv6 address FE80::1 link-local
-    R2(config-subif)#exit
-    R2(config)#interface g0/0/1.120
-    R2(config-subif)#ipv6 address 2001:DB8:20:120::1/64
-    R2(config-subif)#ipv6 address FE80::1 link-local
-    R2(config-subif)#exit
-    R2(config)#ipv6 dhcp pool BRANCH_USERS_V6
-    R2(config-dhcpv6)#address prefix 2001:DB8:20:120::/64
-    R2(config-dhcpv6)#exit
-    R2(config)#interface g0/0/1.120
-    R2(config-subif)#ipv6 nd managed-config-flag
-    R2(config-subif)#ipv6 dhcp server BRANCH_USERS_V6
-    R2(config-subif)#exit
-    R2(config)#interface g0/0/1.140
-    R2(config-subif)#ipv6 address 2001:DB8:20:140::1/64
-    R2(config-subif)#ipv6 address FE80::1 link-local
-    R2(config-subif)#exit
-    R2(config)#
-
-### Шаг 4. Проверка DHCPv6 на маршрутизаторах
-   
-    R1>en
-    R1#
-    R1#show ipv6 dhcp pool
-    DHCPv6 pool: HQ_ADMIN_V6
-    Address allocation prefix: 2001:DB8:10:20::/64 valid 172800 preferred 86400 (4 in use, 0 conflicts)
-    Active clients: 2
-    R1#show ipv6 dhcp binding
-    Client: FE80::20A:41FF:FEC3:C67C
-    DUID: 00010001448EC2DE000A41C3C67C
-    IA NA: IA ID 1916299600, T1 0, T2 0
-    Address: 2001:DB8:10:20:DEA0:9658:7A24:6C92
-             preferred lifetime 86400, valid lifetime 172800
-             expires at September 10 2026 11:11:24 pm (172800 seconds)
-    Client: FE80::201:64FF:FE60:A835
-    DUID: 000100014C9BC53400016460A835
-    IA NA: IA ID 1729085688, T1 0, T2 0
-    Address: 2001:DB8:10:20:F751:DB2D:CD8A:CD8A
-             preferred lifetime 86400, valid lifetime 172800
-             expires at September 10 2026 11:11:24 pm (172800 seconds)
-
-    R2>en
+    Enter configuration commands, one per line.  End with CNTL/Z.
+    R2(config)#ntp server 10.255.0.1
+    R2(config)#end
     R2#
-    R2# show ipv6 dhcp pool
-    DHCPv6 pool: BRANCH_USERS_V6
-    Address allocation prefix: 2001:DB8:20:120::/64 valid 172800 preferred 86400 (2 in use, 0 conflicts)
-    Active clients: 1
-    R2#show ipv6 dhcp binding
-    Client: FE80::2E0:B0FF:FED4:DB0
-    DUID: 00010001B252116E00E0B0D40DB0
-    IA NA: IA ID 34992690, T1 0, T2 0
-    Address: 2001:DB8:20:120:9877:7C43:6EB1:501F
-             preferred lifetime 86400, valid lifetime 172800
-             expires at September 10 2026 11:12:11 pm (172800 seconds)
-### Шаг 5. Проверка таблиц маршрутизации IPv6
+    %SYS-5-CONFIG_I: Configured from console by console
 
-## Часть 6. Статическая и динамическая маршрутизация
-### Шаг 1. Статический маршрут по умолчанию на R1
-### Шаг 2. Настройка OSPF на R1
-###  Шаг 3. Отключение OSPF Hello-пакеты в пользовательских VLAN
-###  Шаг 4. Маршрут по умолчанию через OSPF
-### Шаг 5. Настройте OSPF на R2
-### Шаг 6. Проверка OSPF-маршрутов на маршрутизаторах
-### Шаг 7. Проверка маршрутизации на ПК
-### Шаг 8. Настройка IPv6-маршрутизации на R1/R2
-### Шаг 9. Проверка IPv6-маршрутизации на ПК
-### Шаг 10. Итоговая проверка OSPF
-## Часть 7. ACL
-### Шаг 1. Определение политик безопасности
-### Шаг 2. ACL для HQ Guest
-### Шаг 3. ACL для HQ Users
-### Шаг 4. ACL для Branch Guest
-### Шаг 5. ACL для Branch Users
-### Шаг 6. Проверка HQ Guest
-### Шаг 7. Проверка Branch Guest
-### Шаг 8. Проверка Users
-## Часть 8. Настройка NAT/PAT
-### Шаг 1. Внешний NAT-интерфейс
-### Шаг 2. Внутренние NAT-интерфейсы 
-### Шаг 3. ACL для адресов NAT
-### Шаг 4. PAT через R1
-### Шаг 5. Проверка PAT
-### Шаг 6. Static NAT для PC-A
-## Часть 9. Настройка и проверка CDP и LLDP
-### Шаг 1. Проверка работы CDP на роутерах и маршрутизаторах
-### Шаг 2. Отключение CDP на всех устройствах для проверки LLDP
-### Шаг 3. Проверка LLDP 
-## Часть 10. Настройка NTP 
-### Шаг 1. Проверка и настройка R1 как NTP Master
-### Шаг 2. Настройка клиентов
 ### Шаг 3. Проверка работы NTP
-## Часть 11. Защищённое удалённое управление (SSH)
-### Шаг 1. Настройка SSH на R1/2 и S1/2/3
-### Шаг 2. Ограничение SSH административной сетью  
-### Шаг 3. Проверка SSH и ограничений
+
+    S1#show ntp status
+    Clock is synchronized, stratum 16, reference is 192.168.10.1
+    nominal freq is 250.0000 Hz, actual freq is 249.9990 Hz, precision is 2**24
+    reference time is 2D57328E.00000185 (13:3:10.389 UTC Sun Apr 25 2060)
+    clock offset is 0.00 msec, root delay is 0.00 msec
+    root dispersion is 10.68 msec, peer dispersion is 0.12 msec.
+    loopfilter state is 'CTRL' (Normal Controlled Loop), drift is -0.000001193 s/s system
+    poll interval is 4, last update was 8 sec ago.
+    
+    S2#show ntp status
+    Clock is synchronized, stratum 16, reference is 192.168.10.1
+    nominal freq is 250.0000 Hz, actual freq is 249.9990 Hz, precision is 2**24
+    reference time is 2D5732AA.000001F3 (13:3:38.499 UTC Sun Apr 25 2060)
+    clock offset is 0.00 msec, root delay is 0.00 msec
+    root dispersion is 10.86 msec, peer dispersion is 0.12 msec.
+    loopfilter state is 'CTRL' (Normal Controlled Loop), drift is -0.000001193 s/s system
+    poll interval is 4, last update was 7 sec ago.
+    
+    S3#show ntp status
+    Clock is synchronized, stratum 16, reference is 10.255.0.1
+    nominal freq is 250.0000 Hz, actual freq is 249.9990 Hz, precision is 2**24
+    reference time is 2D5732EE.00000188 (13:4:46.024 UTC Sun Apr 25 2060)
+    clock offset is 0.00 msec, root delay is 0.00 msec
+    root dispersion is 10.92 msec, peer dispersion is 0.00 msec.
+    loopfilter state is 'CTRL' (Normal Controlled Loop), drift is -0.000001193 s/s system
+    poll interval is 4, last update was 15 sec ago.
+    
+    R2#show ntp status
+    Clock is synchronized, stratum 16, reference is 10.255.0.1
+    nominal freq is 250.0000 Hz, actual freq is 249.9990 Hz, precision is 2**24
+    reference time is 2D5732BA.00000E77 (13:3:54.231 UTC Sun Apr 25 2060)
+    clock offset is 3.00 msec, root delay is 6.00 msec
+    root dispersion is 10.86 msec, peer dispersion is 0.12 msec.
+    loopfilter state is 'CTRL' (Normal Controlled Loop), drift is -0.000001193 s/s system
+    poll interval is 4, last update was 13 sec ago.
+ 
+
