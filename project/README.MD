@@ -25,7 +25,7 @@
     - [Шаг 1. Исключение служебных адресов и создание пулов на R1](#шаг-1-исключение-служебных-адресов-и-создание-пулов-на-r1)
     - [Шаг 2. Исключение служебных адресов и создание пулов на R2](#шаг-2-исключение-служебных-адресов-и-создание-пулов-на-r2)
     - [Шаг 3. Ping шлюзов с ПК](#шаг-3-ping-шлюзов-с-пк)
-  - [Часть 5. Статическая и динамическая маршрутизация](#часть-6-статическая-и-динамическая-маршрутизация)
+  - [Часть 5. Статическая и динамическая маршрутизация](#часть-5-статическая-и-динамическая-маршрутизация)
     - [Шаг 1. Статический маршрут по умолчанию на R1](#шаг-1-статический-маршрут-по-умолчанию-на-r1)
     - [Шаг 2. Настройка OSPF на R1](#шаг-2-настройка-ospf-на-r1)
     - [Шаг 3. Отключение OSPF Hello-пакеты в пользовательских VLAN](#шаг-3-отключение-ospf-hello-пакеты-в-пользовательских-vlan)
@@ -36,27 +36,24 @@
     - [Шаг 8. Настройка IPv6-маршрутизации на R1/R2](#шаг-8-настройка-ipv6-маршрутизации-на-r1r2)
     - [Шаг 9. Проверка IPv6-маршрутизации на ПК](#шаг-9-проверка-ipv6-маршрутизации-на-пк)
     - [Шаг 10. Итоговая проверка OSPF](#шаг-10-итоговая-проверка-ospf)
-  - [Часть 6. ACL](#часть-7-acl)
+  - [Часть 6. ACL](#часть-6-acl)
     - [Шаг 1. Определение политик безопасности](#шаг-1-определение-политик-безопасности)
     - [Шаг 2. ACL для HQ Guest](#шаг-2-acl-для-hq-guest)
     - [Шаг 3. ACL для HQ Users](#шаг-3-acl-для-hq-users)
     - [Шаг 4. ACL для Branch Guest](#шаг-4-acl-для-branch-guest)
     - [Шаг 5. ACL для Branch Users](#шаг-5-acl-для-branch-users)
-    - [Шаг 6. Проверка HQ Guest](#шаг-6-проверка-hq-guest)
-    - [Шаг 7. Проверка Branch Guest](#шаг-7-проверка-branch-guest)
-    - [Шаг 8. Проверка Users](#шаг-8-проверка-users)
-  - [Часть 7. Настройка NAT/PAT](#часть-8-настройка-natpat)
+  - [Часть 7. Настройка NAT/PAT](#часть-7-настройка-natpat)
     - [Шаг 1. Внешний NAT-интерфейс](#шаг-1-внешний-nat-интерфейс)
     - [Шаг 2. Внутренние NAT-интерфейсы](#шаг-2-внутренние-nat-интерфейсы)
     - [Шаг 3. ACL для адресов NAT](#шаг-3-acl-для-адресов-nat)
     - [Шаг 4. PAT через R1](#шаг-4-pat-через-r1)
     - [Шаг 5. Проверка PAT](#шаг-5-проверка-pat)
     - [Шаг 6. Static NAT для PC-A](#шаг-6-static-nat-для-pc-a)
-  - [Часть 8. Настройка и проверка CDP и LLDP](#часть-9-настройка-и-проверка-cdp-и-lldp)
+  - [Часть 8. Настройка и проверка CDP и LLDP](#часть-8-настройка-и-проверка-cdp-и-lldp)
     - [Шаг 1. Проверка работы CDP на роутерах и маршрутизаторах](#шаг-1-проверка-работы-cdp-на-роутерах-и-маршрутизаторах)
     - [Шаг 2. Отключение CDP на всех устройствах для проверки LLDP](#шаг-2-отключение-cdp-на-всех-устройствах-для-проверки-lldp)
     - [Шаг 3. Проверка LLDP](#шаг-3-проверка-lldp)
-  - [Часть 9. Настройка NTP](#часть-10-настройка-ntp)
+  - [Часть 9. Настройка NTP](#часть-9-настройка-ntp)
     - [Шаг 1. Проверка и настройка R1 как NTP Master](#шаг-1-проверка-и-настройка-r1-как-ntp-master)
     - [Шаг 2. Настройка клиентов](#шаг-2-настройка-клиентов)
     - [Шаг 3. Проверка работы NTP](#шаг-3-проверка-работы-ntp)
@@ -1110,7 +1107,7 @@ R2 — филиал
 
 ## Часть 5. Статическая и динамическая маршрутизация
 
-Логика маршрутизации
+    Логика маршрутизации
 
               209.165.200.1
                   R3 Lo1
@@ -1132,23 +1129,23 @@ R2 — филиал
                    R2
 ### Шаг 1. Статический маршрут по умолчанию на R1
 
-R1>enable
-R1#conf t
-Enter configuration commands, one per line. End with CNTL/Z.
-R1(config)#ip route 0.0.0.0 0.0.0.0 209.165.200.225
-R1(config)#end
-R1#
-%SYS-5-CONFIG_I: Configured from console by console
-R1#show ip route
-Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
-       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
-       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
-       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
-       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
-       * - candidate default, U - per-user static route, o - ODR
-       P - periodic downloaded static route
-
-Gateway of last resort is 209.165.200.225 to network 0.0.0.0
+    R1>enable
+    R1#conf t
+    Enter configuration commands, one per line. End with CNTL/Z.
+    R1(config)#ip route 0.0.0.0 0.0.0.0 209.165.200.225
+    R1(config)#end
+    R1#
+    %SYS-5-CONFIG_I: Configured from console by console
+    R1#show ip route
+    Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+           D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+           N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+           E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+           i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+           * - candidate default, U - per-user static route, o - ODR
+           P - periodic downloaded static route
+    
+    Gateway of last resort is 209.165.200.225 to network 0.0.0.0
 
          10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
     C       10.255.0.0/30 is directly connected, GigabitEthernet0/0/1.50
@@ -1604,27 +1601,27 @@ R1#show ip ospf neighbor
 
 ### Шаг 1. Проверка и настройка R1 как NTP Master
 
-  R1>en
-  Rl#show clock detail
-  *1:3:50.37 UTC Mon Mar 1 1993
-  Time source is hardware calendar
-  Rl#clock set 19:01:00 27 September 2026
-  R1#conf t
-  Enter
-  configuration commands, one per line.
-  End with CNTL/Z.
-  RL (config) #ntp master 4
-  R1 (config) #exit
-  R1#
-  4SYS-5-CONFIG I: Configured from console by console
-  show ntp status
-  Clock is synchronized, stratum 4, reference is 127. 127. 1.1
-  nominal freq is 250. 0000 Hz, actual freq is 249. 9990 Hz, precision is 2**24
-  reference time is EE371396.000000BE (19:1:42.190 UTC Sun Sep 27 2026)
-  clock offset is 0.00 msec, root delay is 0.00 msec
-  root dispersion is 0.00 msec, peer dispersion is 0.12 msec.
-  loopfilter state is 'CTRL' (Normal Controlled Loop), drift is - 0.000001193 s/s system
-  poll interval is 4, last update was 10 sec ago.
+    R1>en
+    Rl#show clock detail
+    *1:3:50.37 UTC Mon Mar 1 1993
+    Time source is hardware calendar
+    Rl#clock set 19:01:00 27 September 2026
+    R1#conf t
+    Enter
+    configuration commands, one per line.
+    End with CNTL/Z.
+    RL (config) #ntp master 4
+    R1 (config) #exit
+    R1#
+    4SYS-5-CONFIG I: Configured from console by console
+    show ntp status
+    Clock is synchronized, stratum 4, reference is 127. 127. 1.1
+    nominal freq is 250. 0000 Hz, actual freq is 249. 9990 Hz, precision is 2**24
+    reference time is EE371396.000000BE (19:1:42.190 UTC Sun Sep 27 2026)
+    clock offset is 0.00 msec, root delay is 0.00 msec
+    root dispersion is 0.00 msec, peer dispersion is 0.12 msec.
+    loopfilter state is 'CTRL' (Normal Controlled Loop), drift is - 0.000001193 s/s system
+    poll interval is 4, last update was 10 sec ago.
 
 ### Шаг 2. Настройка клиентов
 
