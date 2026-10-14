@@ -1329,15 +1329,15 @@ R1#show ip ospf neighbor
 
 ### Шаг 5. ACL для Branch Users
 
-  R2(config)#ip access-list extended BRANCH_USERS_IN
-  R2(config-ext-nacl)#permit udp any eq bootpc any eq bootps
-  R2(config-ext-nacl)#deny tcp 192.168.120.0 0.0.0.255 192.168.110.0 0.0.0.255 eq 22
-  R2(config-ext-nacl)#deny tcp 192.168.120.0 0.0.0.255 192.168.10.0 0.0.0.255 eq 22
-  R2(config-ext-nacl)#permit ip 192.168.120.0 0.0.0.255 any
-  R2(config-ext-nacl)#exit
-  R2(config)#interface g0/0/1.120
-  R2(config-subif)#ip access-group BRANCH_USERS_IN in
-  R2(config-subif)#exit
+    R2(config)#ip access-list extended BRANCH_USERS_IN
+    R2(config-ext-nacl)#permit udp any eq bootpc any eq bootps
+    R2(config-ext-nacl)#deny tcp 192.168.120.0 0.0.0.255 192.168.110.0 0.0.0.255 eq 22
+    R2(config-ext-nacl)#deny tcp 192.168.120.0 0.0.0.255 192.168.10.0 0.0.0.255 eq 22
+    R2(config-ext-nacl)#permit ip 192.168.120.0 0.0.0.255 any
+    R2(config-ext-nacl)#exit
+    R2(config)#interface g0/0/1.120
+    R2(config-subif)#ip access-group BRANCH_USERS_IN in
+    R2(config-subif)#exit
 
 ## Часть 7. Настройка NAT/PAT
 
