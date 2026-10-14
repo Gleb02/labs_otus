@@ -60,15 +60,15 @@
 
 ## Топология 
 
-![alt text](topology.png)
+![alt text](https://github.com/Gleb02/labs_otus/blob/main/project/image/topology.png)
 
 ## Таблица адресации
 
-
+![alt text](https://github.com/Gleb02/labs_otus/blob/main/project/image/address.png)
 
 ## Таблица VLAN
 
-![alt text](vlan.png)
+![alt text](https://github.com/Gleb02/labs_otus/blob/main/project/image/vlan.png)
 
 ## Часть 1. Настройка сетей VLAN на коммутаторах.
 ### Шаг 1. Создание сетей VLAN на коммутаторах.
